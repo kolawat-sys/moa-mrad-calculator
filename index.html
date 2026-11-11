@@ -168,7 +168,7 @@
         });
         var inp=row.querySelector('input.val');
         if(document.activeElement!==inp){
-          inp.value=fmt(fromSI[f](s.si[f],s.u[f]),f);
+          inp.value=(s.si[f]==null)?'':fmt(fromSI[f](s.si[f],s.u[f]),f);
         }
       });
       var el2=document.getElementById('sum'+s.id);
