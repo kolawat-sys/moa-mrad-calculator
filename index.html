@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MOA / MRAD Calculator · 5 targets · Precision Dynamic Lab</title>
+<title>MOA &amp; MIL Calculator · Target size calculator · Precision Dynamic Lab</title>
 <style>
   :root{
     --bg:#F6F4EF; --ink:#16140F; --muted:#5E574B; --faint:#857D6E;
@@ -27,10 +27,14 @@
   .wrap{max-width:440px;margin:0 auto;padding:30px 22px 44px}
 
   header{display:flex;align-items:center;gap:14px;position:relative;margin-bottom:26px;padding-right:52px}
-  .logo{display:block;flex:none;height:60px;width:auto}
+  .logo{display:block;flex:none;height:72px;width:auto}
   :root[data-theme="dark"] .logo{filter:invert(1)}
   @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .logo{filter:invert(1)} }
-  h1{font-size:30px;letter-spacing:.01em;line-height:1}
+  .titles{flex:1;min-width:0}
+  h1{font-size:24px;letter-spacing:.01em;line-height:1.15;white-space:nowrap;
+    padding-bottom:7px;border-bottom:1px solid var(--line2)}
+  .sub{font-size:13px;letter-spacing:.08em;color:var(--muted);margin-top:7px;text-transform:uppercase}
+  @media (max-width:360px){ h1{font-size:21px} }
   .tag{font-size:14px;color:var(--muted);margin-top:6px}
   .theme{position:absolute;top:50%;margin-top:-21px;right:0;width:42px;height:42px;border:1px solid var(--line2);
     border-radius:50%;background:transparent;color:var(--ink);cursor:pointer;font-size:18px;line-height:1}
@@ -79,8 +83,11 @@
 <div class="wrap">
   <header>
     <button class="theme" id="themeBtn" aria-label="สลับโหมดสว่าง/มืด">◐</button>
-    <img class="logo" src="pdl-logo.webp" alt="Precision Dynamic Lab" width="40" height="60">
-    <h1 class="serif">MOA · MRAD</h1>
+    <img class="logo" src="pdl-logo.webp" alt="Precision Dynamic Lab" width="48" height="72">
+    <div class="titles">
+      <h1 class="serif">MOA &amp; MIL Calculator</h1>
+      <div class="sub">Target size calculator</div>
+    </div>
   </header>
 
 
