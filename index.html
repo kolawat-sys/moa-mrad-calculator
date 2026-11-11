@@ -1,247 +1,237 @@
-<!--
-================================================================================
-  MOA / MRAD Calculator — Range × Angle × Target Size
-  © 2026 Kolawat Runelert · Instagram: @precisiondynamiclab · GitHub: @kolawat-sys
-
-  LICENSE: Free to copy and share for non-commercial / community use,
-  PROVIDED that attribution to Kolawat Runelert is preserved (name, IG handle,
-  and this header). Spun off from COF-calculator-22lr.
-================================================================================
--->
 <!doctype html>
-<html lang="th">
+<html lang="th" data-theme="">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MOA / MRAD Calculator · by Kolawat Runelert · @precisiondynamiclab</title>
-<meta name="description" content="คำนวณ Range × MOA/MRAD × Target Size — สลับหน่วย yard/meter · MOA/MIL · inch/cm">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<title>MOA / MRAD Calculator · 5 targets · Precision Dynamic Lab</title>
 <style>
   :root{
-    --bg:#0e1116; --panel:#161a22; --panel2:#1d2230; --line:#2a3142;
-    --text:#e8ecf2; --muted:#9aa3b2; --accent:#5ea2ff; --accent2:#7aeac4;
-    --warn:#ffb86b;
+    --bg:#F6F4EF; --ink:#1C1A17; --muted:#A39C8E; --faint:#C6BFAF;
+    --line:#E4DFD5; --line2:#D8D2C6; --chipbg:#ECE8DF;
   }
-  *{box-sizing:border-box}
-  html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Sarabun',system-ui,sans-serif;font-size:15px;line-height:1.55}
-  .wrap{max-width:900px;margin:0 auto;padding:28px 18px 60px}
-  header{border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px}
-  h1{font-size:24px;margin:0 0 4px}
-  h1 .g{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sub{color:var(--muted);font-size:14px}
-  .sub a{color:var(--accent);text-decoration:none}
-  .calc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
-  @media(max-width:720px){.calc{grid-template-columns:1fr}}
-  .field{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;position:relative;transition:border-color .15s,box-shadow .15s}
-  .field.output{border-color:var(--accent2);box-shadow:0 0 0 2px rgba(122,234,196,.15);background:linear-gradient(180deg,rgba(122,234,196,.06),var(--panel2))}
-  .field.output input{color:var(--accent2)}
-  .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px;letter-spacing:.3px;text-transform:uppercase}
-  .tag{position:absolute;top:12px;right:12px;font-size:10px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:6px;background:var(--line);color:var(--muted)}
-  .field.output .tag{background:var(--accent2);color:#0e1116;font-weight:700}
-  input[type=number]{width:100%;background:transparent;border:none;outline:none;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;padding:2px 0;-moz-appearance:textfield}
-  input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-  .seg{display:flex;gap:4px;margin-top:10px;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:3px}
-  .seg button{flex:1;border:none;background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;padding:7px 0;border-radius:6px;cursor:pointer}
-  .seg button.on{background:var(--accent);color:#0e1116}
-  .alt{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);min-height:1.4em}
-  .note{margin:10px 0 0;font-size:12.5px;color:var(--muted);text-align:center}
-  .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0}
-  .toolbar button{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-family:inherit;font-size:13px;cursor:pointer}
-  .toolbar button:hover{border-color:var(--accent)}
-  .toolbar .reset{margin-left:auto;color:var(--warn)}
-  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:14px}
-  .panel h2{font-size:15px;margin:0 0 10px;color:var(--accent2)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
-  .cell{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-  .cell .k{font-size:12px;color:var(--muted)}
-  .cell .v{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700}
-  .formula{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);line-height:1.8}
-  footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);text-align:center}
-  footer a{color:var(--accent);text-decoration:none}
+  :root[data-theme="dark"]{
+    --bg:#1A1815; --ink:#ECE7DD; --muted:#8A8374; --faint:#5E584D;
+    --line:#312D27; --line2:#403A32; --chipbg:#262320;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#1A1815; --ink:#ECE7DD; --muted:#8A8374; --faint:#5E584D;
+      --line:#312D27; --line2:#403A32; --chipbg:#262320;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+  .serif{font-family:Georgia,"Times New Roman",serif;font-weight:400}
+  .wrap{max-width:440px;margin:0 auto;padding:30px 22px 44px}
+
+  header{text-align:center;position:relative;margin-bottom:30px}
+  .brand{font-size:11px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+  h1{font-size:26px;letter-spacing:.01em;margin-top:9px}
+  .tag{font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:.02em}
+  .theme{position:absolute;top:-4px;right:0;width:34px;height:34px;border:0.5px solid var(--line2);
+    border-radius:50%;background:transparent;color:var(--muted);cursor:pointer;font-size:15px;line-height:1}
+
+  .set{margin-bottom:26px}
+  .set-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+  .set-no{font-size:11px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
+  .set-sum{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .set-clear{background:none;border:none;color:var(--faint);font-size:14px;cursor:pointer;padding:0 0 0 10px}
+
+  .row{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:12px 0;border-top:0.5px solid var(--line)}
+  .set .row:last-of-type{border-bottom:0.5px solid var(--line)}
+  .lhs{display:flex;align-items:flex-start;gap:9px;min-width:0}
+  .lock{margin-top:2px;width:13px;height:13px;flex:none;border-radius:50%;border:1px solid var(--muted);
+    background:transparent;cursor:pointer;padding:0}
+  .row.fixed .lock{background:var(--ink);border-color:var(--ink)}
+  .lbl{font-size:10.5px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;line-height:1.5}
+  .row.fixed .lbl{color:var(--ink)}
+  .state{font-size:9.5px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase}
+  .units{margin-top:5px;font-size:11px;color:var(--faint);user-select:none}
+  .units b{cursor:pointer;font-weight:400;padding-bottom:1px}
+  .units b.on{color:var(--ink);border-bottom:1px solid var(--ink)}
+  .units span{opacity:.5;margin:0 5px}
+  .rhs{display:flex;align-items:baseline;gap:6px}
+  .dot{width:5px;height:5px;border-radius:50%;background:var(--ink);opacity:0;transition:opacity .2s}
+  .row.result .dot{opacity:1}
+  input.val{font-family:Georgia,"Times New Roman",serif;font-size:26px;color:var(--ink);
+    background:transparent;border:none;text-align:right;width:112px;padding:0;
+    font-variant-numeric:tabular-nums}
+  input.val::placeholder{color:var(--faint)}
+  input.val:focus{outline:none}
+  .row.result input.val{color:var(--ink)}
+
+  .foot{margin-top:34px;border-top:0.5px solid var(--line);padding-top:16px}
+  .formula{font-size:11px;line-height:1.9;color:var(--muted);font-variant-numeric:tabular-nums}
+  .credit{font-size:10.5px;line-height:1.8;color:var(--faint);margin-top:14px;letter-spacing:.01em}
+  .credit a{color:var(--muted);text-decoration:none;border-bottom:0.5px solid var(--line2)}
+  .hint{font-size:11px;color:var(--faint);text-align:center;margin:-16px 0 26px;letter-spacing:.01em}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <header>
+    <button class="theme" id="themeBtn" aria-label="สลับโหมดสว่าง/มืด">◐</button>
+    <div class="brand">Precision Dynamic Lab</div>
+    <h1 class="serif">MOA · MRAD</h1>
+    <div class="tag">five targets · lock one, two run free</div>
+  </header>
 
-<header>
-  <h1><span class="g">MOA / MRAD Calculator</span></h1>
-  <div class="sub">Range × Angle × Target Size · by <strong style="color:var(--text)">Kolawat Runelert</strong> · IG <a href="https://www.instagram.com/precisiondynamiclab" target="_blank" rel="noopener">@precisiondynamiclab</a></div>
-</header>
+  <div class="hint">แตะวงกลมหน้าแถวเพื่อ lock ค่านั้น · อีก 2 ค่าพิมพ์ค่าหนึ่ง อีกค่าคำนวณให้ (● = ผลลัพธ์)</div>
 
-<div class="calc">
-  <div class="field" id="f-range">
-    <span class="tag">INPUT</span>
-    <label>Range</label>
-    <input type="number" id="in-range" inputmode="decimal" step="any" min="0" placeholder="ระยะ">
-    <div class="seg" data-for="range"><button data-u="m" class="on">meter</button><button data-u="yd">yard</button></div>
-    <div class="alt" id="alt-range"></div>
-  </div>
-  <div class="field" id="f-angle">
-    <span class="tag">INPUT</span>
-    <label>Angular size</label>
-    <input type="number" id="in-angle" inputmode="decimal" step="any" min="0" placeholder="มุม">
-    <div class="seg" data-for="angle"><button data-u="moa" class="on">MOA</button><button data-u="mil">MRAD (MIL)</button></div>
-    <div class="alt" id="alt-angle"></div>
-  </div>
-  <div class="field" id="f-size">
-    <span class="tag">INPUT</span>
-    <label>Target size</label>
-    <input type="number" id="in-size" inputmode="decimal" step="any" min="0" placeholder="ขนาด">
-    <div class="seg" data-for="size"><button data-u="in" class="on">inch</button><button data-u="cm">cm</button></div>
-    <div class="alt" id="alt-size"></div>
-  </div>
-</div>
-<p class="note">✦ ใส่ค่า 2 ช่อง → ช่องที่ไม่ได้แก้นานที่สุดจะถูกคำนวณให้อัตโนมัติ (กรอบสีเขียว = ผลลัพธ์) · กดสลับหน่วยได้ทุกช่อง ค่าจะถูกแปลงให้</p>
+  <div id="sets"></div>
 
-<div class="toolbar">
-  <span style="color:var(--muted);font-size:13px">Preset:</span>
-  <button data-p="100,m,1,moa">100 m · 1 MOA</button>
-  <button data-p="100,yd,1,moa">100 yd · 1 MOA</button>
-  <button data-p="100,m,1,mil">100 m · 1 MIL</button>
-  <button data-p="100,yd,1,mil">100 yd · 1 MIL</button>
-  <button class="reset" id="btnReset">↺ Reset</button>
-</div>
-
-<div class="panel">
-  <h2>ค่าเทียบทุกหน่วย</h2>
-  <div class="grid" id="eq"></div>
-</div>
-
-<div class="panel">
-  <h2>1 คลิก ที่ระยะนี้</h2>
-  <div class="grid" id="clicks"></div>
-</div>
-
-<div class="panel">
-  <h2>สูตรที่ใช้</h2>
-  <div class="formula">
-    size = range × angle (rad) · small-angle / subtension<br>
-    1 MOA = π / 10,800 rad (true MOA) → 1.047" @ 100 yd · 2.909 cm @ 100 m<br>
-    1 MRAD (MIL) = 0.001 rad → 3.6" @ 100 yd · 10 cm @ 100 m<br>
-    1 yd = 0.9144 m · 1 in = 2.54 cm · 1 MIL = 3.4377 MOA
+  <div class="foot">
+    <div class="formula">
+      size = range × angle (rad) · small-angle subtension<br>
+      1 MOA = π/10,800 rad → 1.047″ @100yd · 2.909 cm @100m<br>
+      1 MRAD = 0.001 rad → 3.6″ @100yd · 10 cm @100m<br>
+      1 yd = 0.9144 m · 1 in = 2.54 cm · 1 MIL = 3.4377 MOA
+    </div>
+    <div class="credit">
+      Kolawat Runelert · IG <a href="https://instagram.com/precisiondynamiclab">@precisiondynamiclab</a>
+      · YouTube <a href="https://youtube.com/@Runelert">@Runelert</a>
+      · GitHub <a href="https://github.com/kolawat-sys">@kolawat-sys</a><br>
+      Free to copy &amp; share for non-commercial use · credit required
+    </div>
   </div>
 </div>
 
-<footer>
-  © 2026 Kolawat Runelert · IG <a href="https://www.instagram.com/precisiondynamiclab" target="_blank" rel="noopener">@precisiondynamiclab</a> · GitHub <a href="https://github.com/kolawat-sys" target="_blank" rel="noopener">@kolawat-sys</a><br>
-  Free to copy &amp; share for non-commercial use · credit required · Spun off from <a href="https://kolawat-sys.github.io/cof-calculator-22lr/" target="_blank" rel="noopener">COF Calculator</a>
-</footer>
-
-</div>
 <script>
 (function(){
-  // base units: range → meters, angle → radians, size → meters
-  var TO_BASE = {
-    range:{ m:1, yd:0.9144 },
-    angle:{ moa:Math.PI/10800, mil:0.001 },
-    size: { in:0.0254, cm:0.01 }
+  var MOA=Math.PI/10800, MIL=0.001;
+  var toSI={
+    range:function(v,u){return u==='m'?v:v*0.9144;},
+    angle:function(v,u){return u==='moa'?v*MOA:v*MIL;},
+    size:function(v,u){return u==='in'?v*0.0254:v*0.01;}
   };
-  var LABEL = { m:'m', yd:'yd', moa:'MOA', mil:'MIL', in:'in', cm:'cm' };
-  var KEYS = ['range','angle','size'];
-  var unit = { range:'m', angle:'moa', size:'in' };
-  var base = { range:null, angle:null, size:null };   // values in base units
-  var order = ['size','angle','range'];               // edit history: last = most recent
-  var output = 'size';
-  var el = {}; KEYS.forEach(function(k){ el[k]=document.getElementById('in-'+k); });
+  var fromSI={
+    range:function(m,u){return u==='m'?m:m/0.9144;},
+    angle:function(r,u){return u==='moa'?r/MOA:r/MIL;},
+    size:function(m,u){return u==='in'?m/0.0254:m/0.01;}
+  };
+  var dp={range:1,angle:2,size:2};
+  var unitOpts={range:['m','yd'],angle:['moa','mil'],size:['in','cm']};
+  var FIELDS=['range','angle','size'];
 
-  function fmt(v, d){
-    if(v==null || !isFinite(v)) return '—';
-    var s = v.toFixed(d==null?3:d);
-    return s.indexOf('.')>=0 ? s.replace(/\.?0+$/,'') : s;
-  }
-  function dec(k,u){ return k==='range' ? 1 : (u==='mil' ? 3 : (u==='cm' ? 2 : 3)); }
-  function fromInput(k){
-    var raw = el[k].value.trim();
-    if(raw==='') return null;
-    var v = parseFloat(raw);
-    return (isFinite(v) && v>0) ? v*TO_BASE[k][unit[k]] : null;
-  }
-  function show(k){
-    el[k].value = base[k]==null ? '' : fmt(base[k]/TO_BASE[k][unit[k]], dec(k,unit[k]));
+  function fmt(v,f){ if(v==null||!isFinite(v))return'';
+    var n=Math.round(v*Math.pow(10,dp[f]))/Math.pow(10,dp[f]);
+    return String(n); }
+
+  function compute(s){
+    var unknown=FIELDS.filter(function(f){return f!==s.fixed&&f!==s.driver;})[0];
+    var R=s.si.range,A=s.si.angle,Z=s.si.size;
+    if(unknown==='size'){ s.si.size=(R!=null&&A!=null)?R*A:null; }
+    else if(unknown==='angle'){ s.si.angle=(Z!=null&&R)?Z/R:null; }
+    else if(unknown==='range'){ s.si.range=(Z!=null&&A)?Z/A:null; }
+    s.computed=unknown;
   }
 
-  function compute(){
-    var r=base.range, a=base.angle, s=base.size;
-    if(output==='size')  base.size  = (r!=null && a!=null) ? r*a : null;
-    if(output==='angle') base.angle = (r!=null && s!=null) ? s/r : null;
-    if(output==='range') base.range = (a!=null && s!=null) ? s/a : null;
+  var sets=[];
+  for(var i=0;i<5;i++){
+    sets.push({id:i,fixed:'range',driver:'angle',computed:'size',
+      si:{range:null,angle:null,size:null},
+      u:{range:'m',angle:'moa',size:'in'}});
+  }
+
+  var root=document.getElementById('sets');
+
+  function rowHTML(s,f){
+    var opts=unitOpts[f].map(function(u){
+      return '<b data-u="'+u+'" class="'+(s.u[f]===u?'on':'')+'">'+u+'</b>';
+    }).join('<span>·</span>');
+    return ''+
+    '<div class="row" data-f="'+f+'">'+
+      '<div class="lhs">'+
+        '<button class="lock" data-lock="'+f+'" aria-label="lock '+f+'"></button>'+
+        '<div><div class="lbl">'+f+' <span class="state"></span></div>'+
+        '<div class="units">'+opts+'</div></div>'+
+      '</div>'+
+      '<div class="rhs"><span class="dot"></span>'+
+        '<input class="val" inputmode="decimal" placeholder="" data-f="'+f+'"></div>'+
+    '</div>';
   }
 
   function render(){
-    KEYS.forEach(function(k){
-      document.getElementById('f-'+k).classList.toggle('output', k===output);
-      document.querySelector('#f-'+k+' .tag').textContent = k===output ? 'RESULT' : 'INPUT';
+    sets.forEach(function(s){
+      var el=document.getElementById('set'+s.id);
+      FIELDS.forEach(function(f){
+        var row=el.querySelector('.row[data-f="'+f+'"]');
+        row.classList.toggle('fixed',s.fixed===f);
+        row.classList.toggle('result',s.computed===f);
+        row.querySelector('.state').textContent=
+          s.fixed===f?'fixed':(s.computed===f?'auto':'');
+        row.querySelectorAll('.units b').forEach(function(b){
+          b.classList.toggle('on',b.getAttribute('data-u')===s.u[f]);
+        });
+        var inp=row.querySelector('input.val');
+        if(document.activeElement!==inp){
+          inp.value=fmt(fromSI[f](s.si[f],s.u[f]),f);
+        }
+      });
+      var el2=document.getElementById('sum'+s.id);
+      if(s.si.size!=null&&s.si.angle!=null){
+        el2.textContent=fmt(fromSI.size(s.si.size,s.u.size),'size')+(s.u.size==='in'?'″':'cm')
+          +' · '+fmt(fromSI.angle(s.si.angle,s.u.angle),'angle')+' '+s.u.angle;
+      } else el2.textContent='—';
     });
-    show(output);
-    var r=base.range, a=base.angle, s=base.size;
-    // alt line under each field = the other unit
-    document.getElementById('alt-range').textContent = r==null?'':'= '+(unit.range==='m' ? fmt(r/0.9144,1)+' yd' : fmt(r,1)+' m');
-    document.getElementById('alt-angle').textContent = a==null?'':'= '+(unit.angle==='moa' ? fmt(a/0.001,3)+' MIL' : fmt(a/(Math.PI/10800),2)+' MOA');
-    document.getElementById('alt-size').textContent  = s==null?'':'= '+(unit.size==='in' ? fmt(s/0.01,2)+' cm' : fmt(s/0.0254,2)+' in');
-
-    var eq = [
-      ['Range','m',r,1,1],['Range','yd',r,0.9144,1],
-      ['Angle','MOA',a,Math.PI/10800,2],['Angle','MRAD (MIL)',a,0.001,3],
-      ['Target','inch',s,0.0254,2],['Target','cm',s,0.01,2]
-    ];
-    document.getElementById('eq').innerHTML = eq.map(function(x){
-      return '<div class="cell"><div class="k">'+x[0]+' · '+x[1]+'</div><div class="v">'+(x[2]==null?'—':fmt(x[2]/x[3],x[4]))+'</div></div>';
-    }).join('');
-
-    var cl = [
-      ['1 MOA',Math.PI/10800],['¼ MOA',Math.PI/43200],['1 MIL',0.001],['0.1 MIL',0.0001]
-    ];
-    document.getElementById('clicks').innerHTML = cl.map(function(x){
-      var v = r==null ? null : r*x[1];
-      return '<div class="cell"><div class="k">'+x[0]+' @ '+(r==null?'—':fmt(r/TO_BASE.range[unit.range],1)+' '+LABEL[unit.range])+'</div><div class="v">'+
-        (v==null?'—':fmt(v/0.0254,3)+'" · '+fmt(v/0.01,2)+' cm')+'</div></div>';
-    }).join('');
   }
 
-  KEYS.forEach(function(k){
-    el[k].addEventListener('input', function(){
-      order = order.filter(function(x){return x!==k;}); order.push(k);
-      output = order[0];
-      base[k] = fromInput(k);
-      compute(); render();
-    });
+  sets.forEach(function(s){
+    var wrap=document.createElement('div');
+    wrap.className='set'; wrap.id='set'+s.id;
+    wrap.innerHTML=
+      '<div class="set-head"><span class="set-no">Target 0'+(s.id+1)+'</span>'+
+      '<span><span class="set-sum" id="sum'+s.id+'">—</span>'+
+      '<button class="set-clear" data-clr="'+s.id+'" aria-label="clear">↺</button></span></div>'+
+      rowHTML(s,'range')+rowHTML(s,'angle')+rowHTML(s,'size');
+    root.appendChild(wrap);
   });
 
-  document.querySelectorAll('.seg').forEach(function(seg){
-    var k = seg.getAttribute('data-for');
-    seg.addEventListener('click', function(e){
-      var b = e.target.closest('button'); if(!b) return;
-      unit[k] = b.getAttribute('data-u');
-      seg.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x===b); });
-      show(k);           // same physical value, new unit
-      render();
-    });
+  root.addEventListener('input',function(e){
+    var inp=e.target.closest('input.val'); if(!inp)return;
+    var s=sets[+inp.closest('.set').id.replace('set','')];
+    var f=inp.getAttribute('data-f');
+    var raw=inp.value.trim().replace(',','.');
+    s.si[f]=(raw===''||isNaN(parseFloat(raw)))?null:toSI[f](parseFloat(raw),s.u[f]);
+    if(f!==s.fixed){ s.driver=f; }
+    compute(s); render();
   });
 
-  function setUnit(k,u){
-    unit[k]=u;
-    document.querySelectorAll('.seg[data-for="'+k+'"] button').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-u')===u); });
-  }
-  document.querySelectorAll('[data-p]').forEach(function(b){
-    b.addEventListener('click', function(){
-      var p = b.getAttribute('data-p').split(',');
-      setUnit('range',p[1]); setUnit('angle',p[3]);
-      base.range = parseFloat(p[0])*TO_BASE.range[p[1]];
-      base.angle = parseFloat(p[2])*TO_BASE.angle[p[3]];
-      order = ['size','range','angle']; output='size';
-      show('range'); show('angle'); compute(); render();
-    });
-  });
-  document.getElementById('btnReset').addEventListener('click', function(){
-    setUnit('range','m'); setUnit('angle','moa'); setUnit('size','in');
-    base = { range:100, angle:Math.PI/10800, size:null };
-    order = ['size','angle','range']; output='size';
-    show('range'); show('angle'); compute(); render();
+  root.addEventListener('click',function(e){
+    var lk=e.target.closest('.lock');
+    if(lk){ var s=sets[+lk.closest('.set').id.replace('set','')];
+      var f=lk.getAttribute('data-lock');
+      if(s.fixed!==f){ s.fixed=f;
+        if(s.driver===f){ s.driver=FIELDS.filter(function(x){return x!==f;})[0]; }
+        compute(s); render(); }
+      return; }
+    var ub=e.target.closest('.units b');
+    if(ub){ var s2=sets[+ub.closest('.set').id.replace('set','')];
+      var f2=ub.closest('.row').getAttribute('data-f');
+      s2.u[f2]=ub.getAttribute('data-u'); render(); return; }
+    var clr=e.target.closest('.set-clear');
+    if(clr){ var s3=sets[+clr.getAttribute('data-clr')];
+      s3.si={range:null,angle:null,size:null}; render(); }
   });
 
-  document.getElementById('btnReset').click();
+  sets[0].si.range=toSI.range(100,'m');
+  sets[0].si.angle=toSI.angle(1,'moa');
+  compute(sets[0]);
+
+  var tb=document.getElementById('themeBtn'), html=document.documentElement;
+  try{ var saved=localStorage.getItem('moa-theme'); if(saved)html.setAttribute('data-theme',saved); }catch(e){}
+  tb.addEventListener('click',function(){
+    var cur=html.getAttribute('data-theme');
+    var next=cur==='dark'?'light':(cur==='light'?'dark':
+      (matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark'));
+    html.setAttribute('data-theme',next);
+    try{ localStorage.setItem('moa-theme',next); }catch(e){}
+  });
+
+  render();
 })();
 </script>
 </body>
