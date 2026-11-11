@@ -26,13 +26,13 @@
   .serif{font-family:Georgia,"Times New Roman",serif;font-weight:400}
   .wrap{max-width:440px;margin:0 auto;padding:30px 22px 44px}
 
-  header{text-align:center;position:relative;margin-bottom:30px}
-  .logo{display:block;margin:0 auto;height:96px;width:auto}
+  header{display:flex;align-items:center;gap:14px;position:relative;margin-bottom:26px;padding-right:52px}
+  .logo{display:block;flex:none;height:60px;width:auto}
   :root[data-theme="dark"] .logo{filter:invert(1)}
   @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .logo{filter:invert(1)} }
-  h1{font-size:32px;letter-spacing:.01em;margin-top:10px}
+  h1{font-size:30px;letter-spacing:.01em;line-height:1}
   .tag{font-size:14px;color:var(--muted);margin-top:6px}
-  .theme{position:absolute;top:-6px;right:0;width:42px;height:42px;border:1px solid var(--line2);
+  .theme{position:absolute;top:50%;margin-top:-21px;right:0;width:42px;height:42px;border:1px solid var(--line2);
     border-radius:50%;background:transparent;color:var(--ink);cursor:pointer;font-size:18px;line-height:1}
 
   .set{margin-bottom:34px}
@@ -79,12 +79,10 @@
 <div class="wrap">
   <header>
     <button class="theme" id="themeBtn" aria-label="สลับโหมดสว่าง/มืด">◐</button>
-    <img class="logo" src="pdl-logo.webp" alt="Precision Dynamic Lab" width="64" height="96">
+    <img class="logo" src="pdl-logo.webp" alt="Precision Dynamic Lab" width="40" height="60">
     <h1 class="serif">MOA · MRAD</h1>
-    <div class="tag">five targets · lock one, two run free</div>
   </header>
 
-  <div class="hint">แตะวงกลมหน้าแถวเพื่อ lock ค่านั้น · อีก 2 ค่าพิมพ์ค่าหนึ่ง อีกค่าคำนวณให้ (● = ผลลัพธ์)</div>
 
   <div id="sets"></div>
 
@@ -222,9 +220,9 @@
       s3.si={range:null,angle:null,size:null}; render(); }
   });
 
-  sets[0].si.range=toSI.range(100,'m');
-  sets[0].si.angle=toSI.angle(1,'moa');
-  compute(sets[0]);
+  root.addEventListener('focusin',function(e){
+    var inp=e.target.closest('input.val'); if(inp&&inp.value) setTimeout(function(){inp.select();},0);
+  });
 
   var tb=document.getElementById('themeBtn'), html=document.documentElement;
   try{ var saved=localStorage.getItem('moa-theme'); if(saved)html.setAttribute('data-theme',saved); }catch(e){}
